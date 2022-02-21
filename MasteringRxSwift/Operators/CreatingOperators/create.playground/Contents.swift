@@ -50,7 +50,7 @@ enum MyError: Error {
  */
 
 Observable<String>.create { (observer) -> Disposable in
-    guard let url = URL(string: "https://www.apple.com") else {
+    guard let url = URL(string: "https://www.kakaocorp.com/page/") else {
         observer.onError(MyError.error)
         return Disposables.create()
     }
@@ -60,12 +60,12 @@ Observable<String>.create { (observer) -> Disposable in
     }
 
     observer.onNext(html)
+
     observer.onCompleted()
-    
     observer.onNext("After Completed")
     return Disposables.create()
 }
-    .subscribe{ print($0) }
+    .subscribe { print($0) }
     .disposed(by: disposeBag)
 
 /**
@@ -86,6 +86,7 @@ Observable<String>.create { (observer) -> Disposable in
  옵져버블을 종료하기 위해서는 onError, onCompleted를 반드시 호출해야한다.
  옵져버블 중에는 영원히 종료되지않는 것이 있는데, 반드시 호출해야한다.
  */
+
 
 
 

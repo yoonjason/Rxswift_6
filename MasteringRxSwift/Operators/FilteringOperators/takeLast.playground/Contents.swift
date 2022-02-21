@@ -32,6 +32,25 @@ let disposeBag = DisposeBag()
 let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 let subject = PublishSubject<Int>()
 
+subject.takeLast(2)
+    .subscribe(onNext: {
+        print($0)
+    })
+    .disposed(by: disposeBag)
 
+for i in numbers {
+    subject.onNext(i)
+}
+
+subject.onNext(11)
+subject.onCompleted() //버퍼에 저장해두었다가 onCompleted를 전달하면 이 때 값을 방출한다.
+//구독자로 전달된느 시점이 지연된다라고 보면된다. 마지막 갯수만큼 전달
+
+
+enum MyError : Error {
+    case error
+}
+
+subject.onError(MyError.error) //버퍼에 저장되어있는 값을 버리고, 에러 이벤트만 전달한다.
 
 

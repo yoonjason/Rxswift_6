@@ -30,6 +30,14 @@ import RxSwift
 
 let disposeBag = DisposeBag()
 
+Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance)
+    .take(10)
+    .throttle(.seconds(7), scheduler: MainScheduler.instance)
+    .debug("throttle last")
+    .subscribe {
+    print($0)
+}
+    .disposed(by: disposeBag)
 
 
 

@@ -27,9 +27,20 @@ import RxSwift
 /*:
  # just
  */
-
+// 파라미터로 전달한 요소를 그대로 전달한다.
 let disposeBag = DisposeBag()
 let element = "😀"
 
+Observable.just(element)
+    .subscribe(onNext:{
+        print($0)
+    })
+    .disposed(by: disposeBag)
+
+Observable.just([1,2,3])
+    .subscribe(onNext:{
+        print($0)
+    })
+    .disposed(by: disposeBag)
 
 

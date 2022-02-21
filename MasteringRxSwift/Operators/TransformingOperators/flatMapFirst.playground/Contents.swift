@@ -38,8 +38,8 @@ let redRectangle = "🟥"
 let greenRectangle = "🟩"
 let blueRectangle = "🟦"
 
-Observable.from([redCircle, greenCircle, blueCircle])
-    .flatMap { circle -> Observable<String> in
+Observable.from([greenCircle, blueCircle, redCircle])
+    .flatMapFirst { circle -> Observable<String> in
         switch circle {
         case redCircle:
             return Observable.repeatElement(redRectangle)
@@ -57,7 +57,10 @@ Observable.from([redCircle, greenCircle, blueCircle])
     .subscribe { print($0) }
     .disposed(by: disposeBag)
 
-
+/**
+ 
+ 컬러 순서대로 나란히 방출되지는 않는다.
+ */
 
 
 

@@ -29,5 +29,21 @@ import RxSwift
  */
 
 let disposeBag = DisposeBag()
+let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+let subject = PublishSubject<Int>()
+
+subject
+    .toArray()
+    .subscribe{
+    print($0)
+}
+.disposed(by: disposeBag)
+
+subject.onNext(1)
+subject.onNext(2)
+subject.onCompleted()
+//toarray  소스 옵져버블이 방출하는 모든 요소를 하나의 파라미터를 담는다.
+
 
 

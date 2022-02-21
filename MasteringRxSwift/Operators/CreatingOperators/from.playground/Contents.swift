@@ -27,12 +27,26 @@ import RxSwift
 /*:
  # from
  */
-
+//배열의 요소를 하나씩 꺼낸다.
 let disposeBag = DisposeBag()
 let fruits = ["🍏", "🍎", "🍋", "🍓", "🍇"]
 
 
+Observable.from(fruits)
+    .subscribe(onNext: {
+         print($0)
+    })
+    .disposed(by: disposeBag)
 
+/**
+ 하나의 요소는 just
+ 두개 이상의 요소 방출 of
+ 항목을 그대로 방출한다, 배열을 전달하면 배열을 방출한다.
+ 
+ 배열의 요소를 하나씩 방출하는게 필요하다면 from연산자를 사용한다.
+ 
+ 
+ */
 
 
 

@@ -27,9 +27,20 @@ import RxSwift
 /*:
  # skip
  */
+//정수를 파라미터로 받는다.
+
 
 let disposeBag = DisposeBag()
 let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+Observable.from(numbers)
+    .skip(3) //갯수만큼 무시하고 그 이후 요소만 방출한다.
+    .subscribe(onNext:{
+        print($0)
+    })
+    .disposed(by: disposeBag)
+
+//인덱스가 아닐 카운트로 사용된다.
 
 
 

@@ -31,6 +31,13 @@ import RxSwift
 let disposeBag = DisposeBag()
 
 
+Observable.range(start: 1, count: 10)
+    .scan(0, accumulator: +)
+    .subscribe{ print($0) }
+    .disposed(by: disposeBag)
+    //작업 결과를 누적시키면서 중간결과와 최종결과를 방출한다.
+
+
 
 
 

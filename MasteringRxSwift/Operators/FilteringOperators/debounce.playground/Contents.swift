@@ -28,7 +28,10 @@ import RxSwift
  # debounce
  */
 
-
+/**
+ 첫번째 파라미터에는 시간,
+ 타이머 초기화 다시 지정된 시간동안 대기
+ */
 let disposeBag = DisposeBag()
 
 let buttonTap = Observable<String>.create { observer in
@@ -44,6 +47,14 @@ let buttonTap = Observable<String>.create { observer in
          observer.onNext("Tap \(i)")
          Thread.sleep(forTimeInterval: 0.5)
       }
+       
+       Thread.sleep(forTimeInterval: 1)
+       
+       for i in 21...30 {
+           observer.onNext("Tap \(i)")
+           Thread.sleep(forTimeInterval: 0.5)
+       }
+       
       
       observer.onCompleted()
    }
@@ -54,6 +65,7 @@ let buttonTap = Observable<String>.create { observer in
 }
 
 buttonTap
+    .debounce(.milliseconds(500), scheduler: MainScheduler.instance) //경과하고 나서 마지막 이벤트를 방출한다.
    .subscribe { print($0) }
    .disposed(by: disposeBag)
 

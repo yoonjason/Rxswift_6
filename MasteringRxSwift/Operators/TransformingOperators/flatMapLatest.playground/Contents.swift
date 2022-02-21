@@ -34,16 +34,16 @@ let redCircle = "🔴"
 let greenCircle = "🟢"
 let blueCircle = "🔵"
 
-let redRectangle = "🟥"
-let greenRectangle = "🟩"
-let blueRectangle = "🟦"
+let redHeart = "❤️"
+let greenHeart = "💚"
+let blueHeart = "💙"
 
 let redSubject = PublishSubject<String>()
 let greenSubject = PublishSubject<String>()
 let blueSubject = PublishSubject<String>()
 
 Observable.from([redCircle, greenCircle, blueCircle])
-    .flatMap { circle -> Observable<String> in
+    .flatMapLatest { circle -> Observable<String> in
         switch circle {
         case redCircle:
             return redSubject.asObservable()

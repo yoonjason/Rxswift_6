@@ -39,8 +39,12 @@ let greenRectangle = "🟩"
 let blueRectangle = "🟦"
 
 let subject = PublishSubject<String?>()
-
+/**
+ 변환 결과가 nil 이면 방출하지 않는다, nil이 아니면 값을 언래핑해서 방출한다.
+ 
+ */
 subject
+//    .compactMap{ $0 } //nil을 필터링되고 옵셔널을 언래핑한다.
     .subscribe { print($0) }
     .disposed(by: disposeBag)
 

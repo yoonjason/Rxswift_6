@@ -25,15 +25,45 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+/**
+ completed와 error은 받지않고. UI에서 활용한다.
+ RxCocoa
+ 
+ */
 /*:
  # Relay
  */
 
 let bag = DisposeBag()
 
+let prelay = PublishRelay<Int>()
+
+prelay.subscribe{print("1:\($0)")}
+.disposed(by: bag)
+
+prelay.accept(1)
+
+let brelay = BehaviorRelay(value: 1)
+brelay.accept(2)
+
+brelay.subscribe{ print("2: \($0)")}
+.disposed(by: bag)
+
+brelay.accept(3)
+
+print(brelay.value)
+
+//Error 발생
+// brelay.value = 4
 
 
+//처음 버퍼의 크기를 전달한다.
+let rrelay = ReplayRelay<Int>.create(bufferSize: 3)
 
+(1...10).forEach { rrelay.accept($0) } //마지막 값3개만 전달
 
-
+rrelay.subscribe{
+    print("4: \($0)")
+}
+.disposed(by: bag)
 

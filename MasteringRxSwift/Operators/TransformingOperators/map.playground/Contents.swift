@@ -31,6 +31,14 @@ import RxSwift
 let disposeBag = DisposeBag()
 let skills = ["Swift", "SwiftUI", "RxSwift"]
 
+Observable.from(skills)
+    .map { "hello, " + $0
+    }
+    .subscribe(onNext:{
+        print($0)
+    })
+    .disposed(by: disposeBag)
+
 
 
 

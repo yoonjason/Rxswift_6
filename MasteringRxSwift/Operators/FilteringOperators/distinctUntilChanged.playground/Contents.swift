@@ -42,8 +42,32 @@ let persons = [
     Person(name: "Tim", age: 56)
 ]
 
+Observable.from(numbers)
+    .distinctUntilChanged() //두번째로 방출되는 이벤트를 무시한다. 동일한 이벤트가 연속적으로 방출되는 지만 확인한다.
+.subscribe { print($0) }
+    .disposed(by: disposeBag)
 
+//이벤트를 비교할 때 이벤트에 포함된 동일성을 비교한다.
 
+Observable.from(numbers)
+    .distinctUntilChanged({
+    !$0.isMultiple(of: 2) && !$1.isMultiple(of: 2)
+})
+    .subscribe { print($0) }
+    .disposed(by: disposeBag)
 
+Observable.from(tuples)
+    .distinctUntilChanged {
+    $0.1 //값이 다르므로 방출된다.
+}
+    .subscribe {
+    print($0)
+}
+    .disposed(by: disposeBag)
 
-
+Observable.from(persons)
+    .distinctUntilChanged(at: \.name)
+    .subscribe{
+        print($0)
+    }
+    .disposed(by: disposeBag)

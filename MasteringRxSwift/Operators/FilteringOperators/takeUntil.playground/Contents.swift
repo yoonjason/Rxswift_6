@@ -31,17 +31,36 @@ import RxSwift
 let disposeBag = DisposeBag()
 let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
-
-
-
-
-
 let subject = PublishSubject<Int>()
 let trigger = PublishSubject<Int>()
 
+subject.take(until: trigger)
+    .subscribe(onNext:{
+        print($0)
+    })
+    .disposed(by: disposeBag)
 
+subject.onNext(1)
+subject.onNext(2)
 
+//trigger.onNext(0)
 
+subject.onNext(3)
+
+//파라미터로 방출한 옵져버블이 원본 옵져버블이 방출하는 이벤트를 그대로 전달한다.
+
+let subject1 = PublishSubject<Int>()
+subject1.take(until: { $0 > 5 })
+    .subscribe(onNext:{
+        print($0)
+    })
+    .disposed(by: disposeBag)
+
+subject1.onNext(1)
+subject1.onNext(2)
+subject1.onNext(9)
+
+//true를 방출하면 옵져버블을 중단하고 false일 때 방출한다.
 
 
 

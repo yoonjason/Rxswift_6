@@ -30,9 +30,26 @@ import RxSwift
 
 let disposeBag = DisposeBag()
 
+Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance)
+    .buffer(timeSpan: .seconds(5), count: 3, scheduler: MainScheduler.instance)
+    .take(5)
+    .subscribe {
+        print($0)
+    }
+    .disposed(by: disposeBag)
 
 
-
+/**
+ timeSpan: 항목을 수집할 시간,
+ count: 수집할 항목의 시간,
+ scheduler: 지금 시점에서는 중요하지 않다.
+ 시간이 경과하면 수집된 항목만 방출한다.
+ 
+ timeSpan이 경과하지 않더라도,  count만큼 모이면 그대로 방출한다.
+ 
+ 타입 파라미터가 배열로 되어있다.
+ 
+ */
 
 
 

@@ -29,6 +29,35 @@ import RxSwift
  */
 
 let disposeBag = DisposeBag()
+/**
+ 버퍼 연산자처럼 timespan과 maxcount를 지정해서 원본 옵져버블이 방출되는 항목들을 작은 단위의 옵져버블을 방출한다.
+ 버퍼연산자는 수집된 항목을 배열혈태로 방출하지만 수집된 항목을 방출하는 옵져버블을 리턴한다.
+ timeSpan: 수집할 시간,
+ count: 수집할 항목,
+ scheduler: 스케쥴러
+ Inner Observable
+ */
+
+Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance)
+    .window(timeSpan: .seconds(5), count: 3, scheduler: MainScheduler.instance)
+    .take(5)
+    .subscribe {
+    print($0)
+    if let observable = $0.element {
+        observable.subscribe {
+            print("inner : ", $0)
+        }
+    }
+}
+    .disposed(by: disposeBag)
+
+/**
+ next(RxSwift.AddRef<Swift.Int>) -> Inner Observable
+ next(RxSwift.AddRef<Swift.Int>)
+ next(RxSwift.AddRef<Swift.Int>)
+ next(RxSwift.AddRef<Swift.Int>)
+ next(RxSwift.AddRef<Swift.Int>)
+ */
 
 
 

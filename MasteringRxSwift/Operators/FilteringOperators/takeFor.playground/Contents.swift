@@ -33,7 +33,16 @@ let disposeBag = DisposeBag()
 
 let o = Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance)
 
-o.subscribe { print($0) }
+o
+    .take(for: .seconds(3), scheduler: MainScheduler.instance)
+    .subscribe { print($0) }
     .disposed(by: disposeBag)
+
+/**
+ for duration: RxTimeInterval 만큼 전달하고, 그 이후 시간이 흐르면 전달하지 않고 끝낸다.
+ 3초인데 1에서 끝난 이유는 시간상의 오차가 존재하기 때문에 1까지 전달하고 끝낸다.
+ 시간을 파라미터로 받는 연산자는 오차를 항상 발생시킨다.
+ 오차가 있다는
+ */
 
 

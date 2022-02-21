@@ -27,13 +27,24 @@ import RxSwift
 /*:
  # of
  */
-
+//방출한 순서를
 let disposeBag = DisposeBag()
 let apple = "🍏"
 let orange = "🍊"
 let kiwi = "🥝"
 
+Observable.of(apple, orange, kiwi)
+    .subscribe(onNext: {
+    print($0)
+})
+    .disposed(by: disposeBag)
 
+
+Observable.of([1, 2], [3, 4], [5, 6])
+    .subscribe(onNext: {
+    print($0)
+})
+    .disposed(by: disposeBag)
 
 
 
