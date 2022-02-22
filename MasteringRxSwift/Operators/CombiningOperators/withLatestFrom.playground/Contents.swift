@@ -27,20 +27,40 @@ import RxSwift
 /*:
  # withLatestFrom
  */
-
+/**
+ 연산자를 호출하는 옵져버블을 트리거 옵져버블
+ 파라미터로 전달하는 옵져버블을 데이터 옵져버블
+ 
+ 트리거 옵져버블을 가장 최근에 방출한 이벤트를 전달한다.
+ 
+ 
+ 회원가입 버튼을 탭하는 시점에 텍스트 필드에 입력된 값을 가져오는 기능을 구현할 때 활용할 수 있다.
+ 
+ */
 let bag = DisposeBag()
 
 enum MyError: Error {
-   case error
+    case error
 }
 
 let trigger = PublishSubject<Void>()
 let data = PublishSubject<String>()
 
+trigger.withLatestFrom(data)
+    .subscribe {
+    print($0)
+}
+    .disposed(by: bag)
 
+data.onNext("Hello")
+trigger.onNext(()) //트리거로 넥스트 이벤트를 전달하면 data에 전달된 next이벤트가 구독자에게 전달된다.
+trigger.onNext(())
+data.onNext("Swift")
 
+trigger.onNext(()) //트리거가 넥스트 이벤트가 전달이 되어야만 직전에 호출되는게 전달된다.
 
+//data.onCompleted()
+//data.onError(MyError.error)
+//trigger.onNext(())
 
-
-
-
+trigger.onCompleted()

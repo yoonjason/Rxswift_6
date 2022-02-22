@@ -31,15 +31,31 @@ import RxSwift
 let bag = DisposeBag()
 
 enum MyError: Error {
-   case error
+    case error
 }
 
-let greetings = PublishSubject<String>()
-let languages = PublishSubject<String>()
+let greetings = PublishSubject<String>() //source Observable
+let languages = PublishSubject<String>() //source Observable
 
+//source Observable을 결합한다음 연산자가 리턴한 옵져버블이 언제 옵져버블을 방출하는지 이해하는게 핵심이다.
 
+Observable.combineLatest(greetings, languages) { lhs, rhs -> String in
+    return "\(lhs), \(rhs)"
+}
+.subscribe {
+print($0)
+}
+.disposed(by: bag)
 
+greetings.onNext("Hello")
+languages.onNext("world") // 입력된 소스 옵져버블이 모두 이벤트를 받아야 보인다. Behavior로 하게되면 초기값이 있기때문에 다를 수 있다.
 
+greetings.onNext("hi!")
+languages.onNext("Swift")
 
+//greetings.onCompleted()
+greetings.onError(MyError.error)
+languages.onNext("SwitUI") //에러일 경우 다음건 전달 안된다.
 
+languages.onCompleted()
 

@@ -32,8 +32,25 @@ let bag = DisposeBag()
 let fruits = Observable.from(["🍏", "🍎", "🥝", "🍑", "🍋", "🍉"])
 let animals = Observable.from(["🐶", "🐱", "🐹", "🐼", "🐯", "🐵"])
 
+//두개의 옵져버블 연결할 때 사용
+//타입 메서드부터 사용
+Observable.concat([fruits, animals])
+    .subscribe {
+    print($0)
+}.disposed(by: bag)
 
+//인스턴스 메서드 사용
+fruits.concat(animals)
+    .subscribe {
+    print($0)
+}.disposed(by: bag)
 
+animals.concat(fruits)
+    .subscribe {
+    print($0)
+}.disposed(by: bag)
+
+//단순히 하나의 옵져버블 뒤에 다음 옵져버블을 붙인다.
 
 
 

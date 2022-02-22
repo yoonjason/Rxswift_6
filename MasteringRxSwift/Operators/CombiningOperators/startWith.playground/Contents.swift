@@ -30,8 +30,22 @@ import RxSwift
 
 let bag = DisposeBag()
 let numbers = [1, 2, 3, 4, 5]
+/**
+ 기본값이나 시작값을 지정할 때 활용
+ 
+ */
 
-
-
-
-
+Observable.from(numbers)
+    .startWith(99)
+    .startWith(-1, -2)
+    .startWith(-3)
+    .subscribe{
+        print($0)
+    }
+    .disposed(by: bag)
+/**
+ 2개 이상을 연달아 사용가능하다.
+마지막 연산자로 전달된 값부터 방출된다.
+ 99가 1앞에 추가된다.
+ last in first out
+ */

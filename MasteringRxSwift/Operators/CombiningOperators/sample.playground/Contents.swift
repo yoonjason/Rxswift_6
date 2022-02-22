@@ -27,19 +27,34 @@ import RxSwift
 /*:
  # sample
  */
-
+/**
+ 
+ data.withLatestFrom(trigger)
+ 
+ */
 let bag = DisposeBag()
 
 enum MyError: Error {
-   case error
+    case error
 }
 
 let trigger = PublishSubject<Void>()
 let data = PublishSubject<String>()
 
+data.sample(trigger)
+    .subscribe {
+    print($0)
+}
+    .disposed(by: bag)
 
+//data.onNext("Hello")
+trigger.onNext(())
+data.onNext("Hello") //구독자에게 바로 전달되는 것은 아니다.
+trigger.onNext(())
+trigger.onNext(()) //동일한 데이터를 두번 방출하지 않는다.
 
+//data.onCompleted()
+//trigger.onNext(())
 
-
-
-
+//data.onError(MyError.error)
+trigger.onError(MyError.error)
