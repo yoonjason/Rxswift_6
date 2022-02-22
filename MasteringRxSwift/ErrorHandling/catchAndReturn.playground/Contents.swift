@@ -27,7 +27,10 @@ import RxSwift
 /*:
  # catchAndReturn
  */
-
+/**
+ 옵져버블 대신 기본값을 전달하는
+ 
+ */
 let bag = DisposeBag()
 
 enum MyError: Error {
@@ -37,7 +40,16 @@ enum MyError: Error {
 let subject = PublishSubject<Int>()
 
 subject
+    .catchAndReturn(-1) //subjcet가 방출하는 형식이 Int이기 때문이다.
     .subscribe { print($0) }
     .disposed(by: bag)
 
-subject.onError(MyError.error)
+subject.onError(MyError.error) //파라미터로 전달된 값이 구독자에게 전달된다. 그냥 하나의 값이다.
+/**
+ 에러가 발생했을 때 기본 값이 있다면,catchAndReturn을 사용한다. 에러의 종류와 관계 없이 항상 동일한 값만 내뱉는다.(단점)
+ 나머지 경우에는 catch를 사용한다. 클로져를 통해 에러처리 코드를 자유롭게 구현할 수 있다는 장점이 있다.
+ 
+ 작업을 처음부터 새롭게 시작하고 싶다면 retry연산자를 사용한다.
+ 
+ 
+ */

@@ -27,7 +27,16 @@ import RxSwift
 /*:
  # delay
  */
-
+/***
+ 넥스트 이벤트가 구독자에게 전달되는 시점을 지정된 시간만큼 지연시킨다.
+ dutTime: 지열될 시간
+ scheduler: 스케줄러
+ 
+ 에러이벤트는 지연없이 즉시 전달된다.
+ 
+ 넥스트 이벤트까지 지연시킨다.
+ 
+ */
 let bag = DisposeBag()
 
 func currentTimeString() -> String {
@@ -36,8 +45,10 @@ func currentTimeString() -> String {
    return f.string(from: Date())
 }
 
-
-
-
-
+Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance)
+    .take(10)
+    .debug()
+    .delay(.seconds(5), scheduler: MainScheduler.instance)
+    .subscribe { print(currentTimeString(), $0)}
+    .disposed(by: bag)
 

@@ -31,13 +31,16 @@ import RxSwift
 let bag = DisposeBag()
 
 func currentTimeString() -> String {
-   let f = DateFormatter()
-   f.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
-   return f.string(from: Date())
+    let f = DateFormatter()
+    f.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+    return f.string(from: Date())
 }
 
+Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance)
+    .take(10)
+    .debug()
+    .delaySubscription(.seconds(7), scheduler: MainScheduler.instance)
+    .subscribe { print(currentTimeString(), $0) }
+    .disposed(by: bag)
 
-
-
-
-
+//구독시점을 지연시킬뿐, next이벤트가 진행되는 시점은 지연시키지 않는다.

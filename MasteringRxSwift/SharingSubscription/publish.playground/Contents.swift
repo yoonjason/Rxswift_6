@@ -27,10 +27,12 @@ import RxSwift
 /*:
  # publish
  */
-
+/**
+ multicast를 단순하게 구현한다.
+ 
+ */
 let bag = DisposeBag()
-let subject = PublishSubject<Int>()
-let source = Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance).take(5).multicast(subject)
+let source = Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance).take(5).publish() //publish내부에서 publishsubject로 만든다.
 
 source
     .subscribe { print("🔵", $0) }
@@ -41,16 +43,4 @@ source
     .subscribe { print("🔴", $0) }
     .disposed(by: bag)
 
-source.connect()
-
-
-
-
-
-
-
-
-
-
-
-
+source.connect() //생략할 수 없다.

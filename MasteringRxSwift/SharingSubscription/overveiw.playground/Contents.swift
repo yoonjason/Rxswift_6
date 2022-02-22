@@ -46,13 +46,17 @@ let source = Observable<String>.create { observer in
     }
 }
 .debug()
+.share()
 
 
 source.subscribe().disposed(by: bag)
 source.subscribe().disposed(by: bag)
 source.subscribe().disposed(by: bag)
 
-
+//옵져버블의 구독이 시작되면, 시퀀스가 시작된다.
+//구독자가 시작되면 항상 새로운 시퀀스가 실행된다.
+//모든 구독자가 하나의 옵져버블을 구독할 수 있게 해야한다.
+//공유할 구독이 있기때문에 새로운 시퀀스가 시작되지않는다. 그래서 1개만 실행된다.
 
 
 

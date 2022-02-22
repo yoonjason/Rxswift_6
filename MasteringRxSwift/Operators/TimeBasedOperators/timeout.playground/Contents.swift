@@ -27,14 +27,41 @@ import RxSwift
 /*:
  # timeout
  */
-
+/**
+ 정수ㅡㄹ 방출하는 서브젝트 선언
+ 타임아웃 연산자 호출하고 구독
+ 
+소스옵져버블이 방출하는 모든요소에 타임아웃을 지정한다.
+ dueTime:시간안에 방출하지않으면 error를 방출한다.
+ 시간안에 방출하면, 구독자에게 전달한다.
+ other: 옵져버블 전달
+ */
 
 let bag = DisposeBag()
 
 let subject = PublishSubject<Int>()
 
+//subject.timeout(.seconds(3), scheduler: MainScheduler.instance)
+//    .subscribe { print($0) }
+//    .disposed(by: bag)
+
+Observable<Int>.timer(.seconds(2), period: .seconds(5), scheduler: MainScheduler.instance)
+    .subscribe(onNext: {
+    subject.onNext($0)
+})
+    .disposed(by: bag)
+//다음에 값이 전달되는 시간이 5초
 
 
-
+subject.timeout(.seconds(3), other: Observable.just(1), scheduler: MainScheduler.instance)
+    .subscribe { print($0) }
+    .disposed(by: bag)
+/**
+ next(0)
+ next(1)
+ completed
+ 
+타임아웃이 전달되면, other에 선언되어있는 옵져버블이 전달된다.
+ */
 
 

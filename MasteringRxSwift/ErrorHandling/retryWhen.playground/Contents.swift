@@ -40,27 +40,31 @@ var attempts = 1
 let source = Observable<Int>.create { observer in
     let currentAttempts = attempts
     print("START #\(currentAttempts)")
-    
+
     if attempts < 3 {
         observer.onError(MyError.error)
         attempts += 1
     }
-    
+
     observer.onNext(1)
     observer.onNext(2)
     observer.onCompleted()
-    
+
     return Disposables.create {
         print("END #\(currentAttempts)")
     }
 }
 
 let trigger = PublishSubject<Void>()
-
+//클로져를 파라미터로 받는다, 옵져버블이 방출된다. 트리거 옵져버블을 리턴한다. 작업을 재시도 한다.
 source
+    .retry { _ in trigger }
     .subscribe { print($0) }
     .disposed(by: bag)
 
+DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+    trigger.onNext(())
+}
 
 
 

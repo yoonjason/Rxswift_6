@@ -27,10 +27,41 @@ import RxSwift
 /*:
  # interval
  */
+/**
+ 
+ 특정주기마다 정수를 방출하는 옵져버블이 필요하다면 이 연산자를 사용한다.
+ 
+ period: RxTimeInterval, -> 디스패치 인터벌과 같다.
+ scheduler: SchedulerType
+ 
+ 더블이나 문자열같은 형식은 사용할 수 없다.
+ 
+ 새로운 구독이 추가되는 시점에 내부에 있는 타이머가 시작된다는 것이다.
+ */
 
+let disposeBag = DisposeBag()
 
+let i = Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance)
 
+i
+    .take(3)
+    .subscribe { print($0) }
+    .disposed(by: disposeBag)
 
+let subscription1 = i.subscribe { print("1 >> \($0)") }
+
+DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+    subscription1.dispose()
+}
+
+var subscription2: Disposable?
+
+DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+    subscription2 = i.subscribe { print("2 >> \($0)")}
+}
+DispatchQueue.main.asyncAfter(deadline: .now() + 7) {
+    subscription2?.dispose()
+}
 
 
 

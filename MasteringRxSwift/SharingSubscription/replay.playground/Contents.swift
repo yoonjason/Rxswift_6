@@ -28,10 +28,15 @@ import RxSwift
 /*:
  # replay, replayAll
  */
-
+/**
+ 버퍼를 전달하고
+ 코드를 단순하게 바꾼다.
+ 
+ subject에 집중해본다.
+ */
 let bag = DisposeBag()
-let subject = PublishSubject<Int>()
-let source = Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance).take(5).multicast(subject)
+//let subject = ReplaySubject<Int>.create(bufferSize: 5)
+let source = Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance).take(5).replay(5)
 
 source
     .subscribe { print("🔵", $0) }
@@ -44,19 +49,13 @@ source
 
 source.connect()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/**
+ 첫번째는 지연없이 구독을 시작하기 때문에 모든 이벤트 전달
+ 두번째 구독자는 3초뒤에 시작, 이전에 전달되었던 것도 함께 받고 싶을 때
+ PublishSubject를 별도의 버퍼를 갖고 있지 않다.
+ 0,1도 같이 받고 있다. ReplaySubject의 버퍼사이즈만큼 들고 있기 때문이다.
+ 
+ replayAll()은 메모리가 증가할 수 있기 때문에 웬만하면 사용하지말아야함.
+ */
 
 

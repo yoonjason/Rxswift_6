@@ -37,6 +37,22 @@ class HelloRxCocoaViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        tapButton.rx.tap.subscribe(onNext: { [weak self] in
+//            guard let self = self else { return }
+//            self.valueLabel.rx.text.onNext("Hello, RxCococa")
+//        })
+//            .disposed(by: bag)
         
+        tapButton.rx.tap
+            .map{
+                "Hello, Rxcocoa"
+            }
+            .bind(to: valueLabel.rx.text) //자동으로 합성한 바인더이다. rxcocoa는 바인더가 사용하는 바인더는 일반 속성과 동일한 방법으로 자동으로 바인딩 처리를 한다.
+//            .subscribe(onNext:{ [weak self] in
+//                guard let self = self else { return }
+//                self.valueLabel.text = $0
+//            })
+            .disposed(by: bag)
+            
     }
 }

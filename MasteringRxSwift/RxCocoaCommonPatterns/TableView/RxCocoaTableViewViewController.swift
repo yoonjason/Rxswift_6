@@ -41,13 +41,65 @@ class RxCocoaTableViewViewController: UIViewController {
     
     let bag = DisposeBag()
     
-    
+    let nameObservable = Observable.of(appleProducts.map{ $0.name })
+    let productObservable = Observable.of(appleProducts)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // #1
+//        nameObservable.bind(to: listTableView.rx.items) { [weak self] tableView, row, element in
+//            guard let self = self else { return UITableViewCell() }
+//
+//            let cell = tableView.dequeueReusableCell(withIdentifier: "standardCell")!
+//            cell.textLabel?.text = element
+//            return cell
+//
+//        }
+//        .disposed(by: bag)
         
+        // #2
+//        nameObservable.bind(to: listTableView.rx.items(cellIdentifier: "standardCell")) { [weak self] row, element, cell in
+//            cell.textLabel?.text = element
+//        }
+//        .disposed(by: bag)
+        
+        
+        // #3
+        productObservable.bind(to: listTableView.rx.items(cellIdentifier: "productCell", cellType: ProductTableViewCell.self)) { [weak self] row, element, cell in
+            cell.categoryLabel.text = element.category
+            cell.productNameLabel.text = element.name
+            cell.summaryLabel.text = element.summary
+            cell.priceLabel.text = self?.priceFormatter.string(for: element.price)
+        }
+        .disposed(by: bag)
+        
+//        listTableView.rx.modelSelected(Product.self)
+//            .subscribe(onNext: { [weak self] model in
+//                print(model.name)
+//            })
+//            .disposed(by: bag)
+//
+//        listTableView.rx.itemSelected
+//            .subscribe(onNext: { indexPath in
+//                self.listTableView.deselectRow(at: indexPath, animated: true)
+//            })
+//            .disposed(by: bag)
+        
+        Observable.zip(listTableView.rx.itemSelected, listTableView.rx.modelSelected(Product.self))
+            .bind{ [weak self] indexPath, product in
+                self?.listTableView.deselectRow(at: indexPath, animated: true)
+                print(product.name)
+            }
+            .disposed(by: bag)
+        
+        listTableView.rx.setDelegate(self)
+            .disposed(by: bag)
     }
+}
+
+extension RxCocoaTableViewViewController: UIScrollViewDelegate {
+    
 }
 
 

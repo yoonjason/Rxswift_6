@@ -27,35 +27,36 @@ import RxSwift
 /*:
  # refCount
  */
-
+/**
+ 
+ 커넥터블 옵져버블 타입 익스텐션에 구현되어있다.
+ 일반 옵져버블에서는 사용할 수 없다.
+ 
+ 파라미터는 없고, 옵져버블을 리턴한다.
+ RefCount() 커넥터블 옵져버블을 통해 생성하는 특별한 옵져버블이다.(레프카운트 옵져버블)
+ 구독자가 구독을 중지하고, 다른 구독자가 없다면, 커넥터블 옵져버블에서 시퀀스를 중지한다.
+ 새로운 구독자가 추가되면 다시 시작된다.
+ */
 let bag = DisposeBag()
-let source = Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance).debug().publish()
+let source = Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance).debug().publish().refCount() //내부에서 connect()를 호출한다.
 
 let observer1 = source
     .subscribe { print("🔵", $0) }
 
-source.connect()
+//source.connect()
+
 
 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
     observer1.dispose()
 }
+//중지되고 나면, 디스커넥트된다.
 
-DispatchQueue.main.asyncAfter(deadline: .now() + 7) {
+DispatchQueue.main.asyncAfter(deadline: .now() + 7) { //7초뒤 새로운 구독자가 추가되면, 다시 커넥트가 된다. 새로운 시퀀스가 시작된다.
     let observer2 = source.subscribe { print("🔴", $0) }
-    
+
     DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
         observer2.dispose()
     }
 }
-
-
-
-
-
-
-
-
-
-
 
 

@@ -27,8 +27,28 @@ import RxSwift
 /*:
  # timer
  */
-
+/**
+ 
+정수를 반복적으로 방출하는 옵져버블 생성
+ 지연시간과 조절할 수 있다.
+ dueTime: 구독을 시작하고 첫번째 요소가 구독자에게 전달되는 상대적인 시간, 1초를 적으면 1초후에 구독자에게 전달
+ period: 반복주기, 반복주기가 없으면 하나의 요소만 방출하고 종료된다.
+ 
+ */
 let bag = DisposeBag()
+
+//Observable<Int>.timer(.seconds(1), scheduler: MainScheduler.instance)
+//    .subscribe{ print($0) }
+//    .disposed(by: bag)
+
+let i = Observable<Int>.timer(.seconds(1), period: .milliseconds(500), scheduler: MainScheduler.instance) //반복주기 0.5초
+    .subscribe{ print($0) }
+
+
+DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+    i.dispose()
+}
+
 
 
 
